@@ -5,21 +5,12 @@ const axios = require('axios');
 const app = express();
 const PORT = 8088;
 const MAX_CONCURRENT_BROWSERS = 2;
-const VIEWPORT_WIDTH = 1920; // ปรับขนาดความกว้างของ viewport ตามที่คุณต้องการ
-const VIEWPORT_HEIGHT = 1080; // ปรับขนาดความสูงของ viewport ตามที่คุณต้องการ
-
+const VIEWPORT_WIDTH = 1920; // กำหนด Viewport Width
+const VIEWPORT_HEIGHT = 1080; // กำหนด Viewport Height
 
 const userAgents = [
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134',
-  'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134',
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-  'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Firefox/91.0',
-  'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Firefox/91.0',
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36 Chrome/91.0.4472.124',
-  'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36 Chrome/91.0.4472.124',
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edge/92.0.902.78',
-  'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edge/92.0.902.78'
+  // เพิ่ม User-Agent อื่น ๆ ตามต้องการ
 ];
 
 const browserQueue = [];
@@ -31,7 +22,7 @@ function getRandomUserAgent() {
 
 async function createBrowserInstance() {
   const browser = await puppeteer.launch({
-    headless: NEW,
+    headless: true,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
@@ -53,10 +44,11 @@ app.get('/', async (req, res) => {
   try {
     const response = await axios.head(url);
     if (response.status !== 200) {
-      return res.status(400).send('The specified URL is not accessible.');
+      return res.status(400).send('The specified URL is not accessible. Status code: ' + response.status);
     }
   } catch (error) {
-    return res.status(400).send('Error checking URL accessibility.');
+    console.error(error);
+    return res.status(500).send('An error occurred while fetching the URL.');
   }
 
   let browser;
@@ -71,23 +63,30 @@ app.get('/', async (req, res) => {
     }
 
     page = await browser.newPage();
-    await page.setUserAgent(getRandomUserAgent());
     await page.setViewport({ width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT });
+    await page.setUserAgent(getRandomUserAgent()); // กำหนด User-Agent สุ่ม
+
     await page.goto(url);
+
     await page.waitForSelector('body');
+
     const htmlContent = await page.content();
+
     const randomUserAgent = getRandomUserAgent();
     res.set({
       'Content-Type': 'text/html',
       'X-Powered-By': randomUserAgent,
     });
+
     res.send(htmlContent);
   } catch (error) {
+    console.error(error);
     res.status(500).send('An error occurred while fetching the URL.');
   } finally {
     if (page) {
       await page.close();
     }
+
     if (browser) {
       await browser.close();
     }
