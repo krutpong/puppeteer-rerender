@@ -8,10 +8,9 @@ const MAX_CONCURRENT_BROWSERS = 2;
 const VIEWPORT_WIDTH = 1920; // กำหนด Viewport Width
 const VIEWPORT_HEIGHT = 1080; // กำหนด Viewport Height
 
-const userAgents = [
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134',
-  // เพิ่ม User-Agent อื่น ๆ ตามต้องการ
-];
+// อ่าน User-Agent จากไฟล์ JSON
+const userAgentsData = fs.readFileSync('useragents.json', 'utf8');
+const userAgents = JSON.parse(userAgentsData).userAgents;
 
 const browserQueue = [];
 
