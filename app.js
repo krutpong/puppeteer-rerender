@@ -31,7 +31,7 @@ function getRandomUserAgent() {
 
 async function createBrowserInstance() {
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: NEW,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
