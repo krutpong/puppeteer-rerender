@@ -1,20 +1,20 @@
-# Use an official Node.js runtime as a parent image
+# สร้าง Docker image โดยใช้ Node.js ล่าสุด
 FROM node:14
 
-# Set the working directory in the container
+# ตั้งค่าโฟลเดอร์ที่คอนเทนเนอร์จะทำงานในโฟลเดอร์ /app
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# คัดลอกไฟล์ package.json และ package-lock.json เข้าสู่คอนเทนเนอร์
 COPY package*.json ./
 
-# Install application dependencies
+# ติดตั้ง dependencies โดยใช้ npm
 RUN npm install
 
-# Copy the rest of the application source code to the working directory
+# คัดลอกโค้ดและไฟล์อื่น ๆ ไปยังคอนเทนเนอร์
 COPY . .
 
-# Expose the port that the application will run on
+# เปิดพอร์ตที่คอนเทนเนอร์จะใช้
 EXPOSE 8088
 
-# Start the application
-CMD ["node", "app.js"]
+# คำสั่งที่จะรันแอปพลิเคชันของคุณเมื่อคอนเทนเนอร์เริ่มต้น
+CMD [ "node", "app.js" ]
