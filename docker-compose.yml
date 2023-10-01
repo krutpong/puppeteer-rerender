@@ -1,0 +1,12 @@
+version: '3'
+services:
+  express-app:
+    build:
+      context: .
+    ports:
+      - "8088:8088"
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./app:/app
+    restart: always
