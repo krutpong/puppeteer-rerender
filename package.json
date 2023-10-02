@@ -1,14 +1,10 @@
 {
-  "name": "express-puppeteer-app",
+  "name": "nodejs-puppeteer-app",
   "version": "1.0.0",
-  "description": "Express.js app with Puppeteer",
-  "main": "app.js",
-  "scripts": {
-    "start": "node app.js"
-  },
+  "description": "Node.js Express app with Puppeteer",
+  "main": "server.js",
   "dependencies": {
     "express": "^4.17.1",
-    "puppeteer": "^19.4.0",
-    "axios": "^0.23.0"
+    "puppeteer": "^10.4.0"
   }
 }
