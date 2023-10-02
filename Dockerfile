@@ -1,20 +1,62 @@
-# สร้าง Docker image โดยใช้ Node.js ล่าสุด
+# Use a Node.js runtime as the base image
 FROM node:14
 
-# ตั้งค่าโฟลเดอร์ที่คอนเทนเนอร์จะทำงานในโฟลเดอร์ /app
+# Install dependencies and add Puppeteer
+RUN apt-get update && apt-get install -y \
+    gconf-service \
+    libasound2 \
+    libatk1.0-0 \
+    libc6 \
+    libcairo2 \
+    libcups2 \
+    libdbus-1-3 \
+    libexpat1 \
+    libfontconfig1 \
+    libgcc1 \
+    libgconf-2-4 \
+    libgdk-pixbuf2.0-0 \
+    libglib2.0-0 \
+    libgtk-3-0 \
+    libnspr4 \
+    libpango-1.0-0 \
+    libpangocairo-1.0-0 \
+    libstdc++6 \
+    libx11-6 \
+    libx11-xcb1 \
+    libxcb1 \
+    libxcomposite1 \
+    libxcursor1 \
+    libxdamage1 \
+    libxext6 \
+    libxfixes3 \
+    libxi6 \
+    libxrandr2 \
+    libxrender1 \
+    libxss1 \
+    libxtst6 \
+    ca-certificates \
+    fonts-liberation \
+    libappindicator1 \
+    libnss3 \
+    lsb-release \
+    xdg-utils \
+    wget \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm install puppeteer
+
+# Create a directory for your app
 WORKDIR /app
 
-# คัดลอกไฟล์ package.json และ package-lock.json เข้าสู่คอนเทนเนอร์
+# Copy your app files to the container
 COPY package*.json ./
+COPY app.js ./
 
-# ติดตั้ง dependencies โดยใช้ npm
+# Install app dependencies
 RUN npm install
 
-# คัดลอกโค้ดและไฟล์อื่น ๆ ไปยังคอนเทนเนอร์
-COPY . .
-
-# เปิดพอร์ตที่คอนเทนเนอร์จะใช้
+# Expose the port your app will run on
 EXPOSE 8088
 
-# คำสั่งที่จะรันแอปพลิเคชันของคุณเมื่อคอนเทนเนอร์เริ่มต้น
-CMD [ "node", "app.js" ]
+# Start your app
+CMD ["node", "app.js"]
