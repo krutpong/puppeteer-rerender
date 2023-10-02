@@ -1,7 +1,19 @@
 version: '3'
 services:
-  web:
-    build:
-      context: .  # ใช้ไฟล์ Dockerfile ในโฟลเดอร์ปัจจุบัน
+  puppeteer-renderer-1:
+    image: ghcr.io/zenato/puppeteer-renderer:latest
+    environment:
+      - PUPPETEER_ARGS=--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-dev-shm-usage --disable-extensions --no-sandbox --headless --single-process
+  puppeteer-renderer-2:
+    image: ghcr.io/zenato/puppeteer-renderer:latest
+    environment:
+      - PUPPETEER_ARGS=--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-dev-shm-usage --disable-extensions --no-sandbox --headless --single-process
+  nginx:
+    image: nginx:latest
     ports:
-      - "3000:3000"  # Map พอร์ต 3000 ของ host เข้ากับพอร์ต 3000 ของ container
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - puppeteer-renderer-1
+      - puppeteer-renderer-2
