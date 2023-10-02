@@ -3,7 +3,7 @@ FROM node:14
 
 # ติดตั้ง Puppeteer
 RUN apt-get update && apt-get install -y chromium
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 # สร้างโฟลเดอร์และกำหนดให้เป็นไดเรกทอรีทำงาน
 WORKDIR /app
@@ -19,4 +19,4 @@ COPY . .
 EXPOSE 8088
 
 # เริ่มแอปพลิเคชัน
-CMD [ "node", "app.js" ]
+CMD [ "node", "server.js" ]
