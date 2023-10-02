@@ -27,7 +27,7 @@ app.get("/html", async (req, res) => {
 
     await browser.close();
 
-    // ตั้งค่า header เพื่อรองรับ UTF-8
+    // Set the response header to support UTF-8
     res.header("Content-Type", "text/html; charset=utf-8");
     res.send(content);
   } catch (error) {
