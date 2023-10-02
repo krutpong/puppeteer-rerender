@@ -1,22 +1,17 @@
-# ใช้ Node.js เวอร์ชันล่าสุดเป็นฐาน
-FROM node:14
+# ใช้ฐานข้อมูลของ Puppeteer และ Node.js
+FROM ghcr.io/puppeteer/puppeteer:21.3.6
 
-# ติดตั้ง Puppeteer
-RUN apt-get update && apt-get install -y chromium
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
-
-# สร้างโฟลเดอร์และกำหนดให้เป็นไดเรกทอรีทำงาน
+# ตั้งแต่งไดเร็คทอรีที่คุณจะทำงานในนั้น
 WORKDIR /app
 
-# คัดลอกไฟล์ package.json และ package-lock.json และติดตั้ง dependencies
+# คัดลอกไฟล์ package.json และ package-lock.json ไปยัง image
 COPY package*.json ./
+
+# ติดตั้ง dependencies ของแอปพลิเคชัน
 RUN npm install
 
-# คัดลอกโค้ดแอปพลิเคชัน
+# คัดลอกโค้ดและไฟล์อื่น ๆ ไปยัง image
 COPY . .
 
-# กำหนดพอร์ตที่แอปพลิเคชันจะใช้ (8088)
-EXPOSE 8088
-
 # เริ่มแอปพลิเคชัน
-CMD [ "node", "server.js" ]
+CMD ["node", "app.js"]

@@ -1,10 +1,9 @@
 version: '3'
 services:
-  express-app:
+  web:
     build:
-      context: .
+      context: .  # ใช้ไฟล์ Dockerfile ในโฟลเดอร์ปัจจุบัน
     ports:
-      - "8088:8088"
-    environment:
-      NODE_ENV: production
-    restart: always
+      - "3000:3000"  # Map พอร์ต 3000 ของ host เข้ากับพอร์ต 3000 ของ container
+    volumes:
+      - .:/app  # แชร์โฟลเดอร์ปัจจุบันของโฟลเดอร์ /app ใน container
