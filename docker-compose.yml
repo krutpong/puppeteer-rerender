@@ -4,22 +4,32 @@ services:
     image: ghcr.io/zenato/puppeteer-renderer:latest
     environment:
       - PUPPETEER_ARGS=--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-dev-shm-usage --disable-extensions --no-sandbox --headless --single-process
+    restart: always
+
   puppeteer-renderer-2:
     image: ghcr.io/zenato/puppeteer-renderer:latest
     environment:
       - PUPPETEER_ARGS=--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-dev-shm-usage --disable-extensions --no-sandbox --headless --single-process
+    restart: always
+
   puppeteer-renderer-3:
     image: ghcr.io/zenato/puppeteer-renderer:latest
     environment:
       - PUPPETEER_ARGS=--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-dev-shm-usage --disable-extensions --no-sandbox --headless --single-process
+    restart: always
+
   puppeteer-renderer-4:
     image: ghcr.io/zenato/puppeteer-renderer:latest
     environment:
       - PUPPETEER_ARGS=--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-dev-shm-usage --disable-extensions --no-sandbox --headless --single-process
+    restart: always
+
   puppeteer-renderer-5:
     image: ghcr.io/zenato/puppeteer-renderer:latest
     environment:
       - PUPPETEER_ARGS=--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-dev-shm-usage --disable-extensions --no-sandbox --headless --single-process
+    restart: always
+
   nginx:
     image: nginx:latest
     ports:
@@ -32,3 +42,4 @@ services:
       - puppeteer-renderer-3
       - puppeteer-renderer-4
       - puppeteer-renderer-5
+    restart: always
